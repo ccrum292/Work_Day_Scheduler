@@ -4,7 +4,7 @@ var currentDateAndTime = Date(Date.now());
 var currentHour = new Date().getHours();
 
 $("#currentDay").append(currentDateAndTime);
-console.log(currentHour)
+// console.log(currentHour)
 
 for(var i = 0; i < hoursArray.length; i++){
     var rowEl = $("<div class='row'>")
@@ -24,32 +24,65 @@ for(var i = 0; i < hoursArray.length; i++){
             textColEl.addClass('future')
         }
     rowEl.append(textColEl);
-    var textFieldEl = $('<textarea id="text-area">')
+    var textFieldEl = $('<textarea>')
+    textFieldEl.attr('id', "tx"+i)
     textColEl.append(textFieldEl);
     
 
     var saveBtnColEl = $("<div class='col-1 saveBtn i:hover'>")
     rowEl.append(saveBtnColEl);
-    var buttonEl = $("<button id='Submit' class='i:hover button'>")
+    var buttonEl = $("<button class='i:hover button'>")
     buttonEl.text("Save")
+    buttonEl.attr('id', i)
     saveBtnColEl.append(buttonEl);
     buttonEl.on("click", clickToLocalStorage)
     
+    getLocalStorage(i);
 }
 
 
+var saveBtn = $('.button');
 
-function clickToLocalStorage(event){
-    event.preventDefault();
-    event.stopPropagation();
-    if(event.target.matches("button")){
-    var textArea = document.getElementById("text-area").value;
-    console.log(textArea)
-    var storageArray = JSON.parse(localStorage.getItem("textArea"))
-    if(!storageArray){storageArray = []}
-    storageArray.push(textArea);
+function clickToLocalStorage(i){
+    // var textArea = $(this).siblings(".text-area").val();
+    // console.log(textArea)
+    
+    
+    
+    // console.log(this)
+    var clickId = $(this).attr("id");
+    // console.log(clickId)
+    // var textArea = document.getElementById("text-area").value;
+    // var textArea = $(this).getElementById("text${i}").value;  
+    // console.log('#tx'+i)
+    var textArea = document.getElementById("tx"+clickId).value;
+    // console.log(this.parrent)
+    // var textArea = $(this).parrent.sibling.children[1].val()
+    // console.log(textArea)
+    localStorage.setItem(clickId, textArea);
+    
+    
+    // event.preventDefault();
+    // event.stopPropagation();
+    // if(event.target.matches("button")){
+    // var textArea = document.getElementById("text-area").value;
+    // console.log(textArea)
+    // var storageArray = JSON.parse(localStorage.getItem("textArea"))
+    // if(!storageArray){storageArray = []}
+    // storageArray.push(textArea);
 
-    localStorage.setItem("textArea", JSON.stringify(storageArray))
+    // localStorage.setItem("textArea", JSON.stringify(storageArray))
+    // }
+}
+
+
+function getLocalStorage(variable){
+    var returnValue = localStorage.getItem(variable)
+//    console.log(returnValue.text)
+    if (returnValue){
+        $('#tx'+variable).text(returnValue);
+        // console.log($('#tx'+variable))
     }
-}
+
+} 
 
